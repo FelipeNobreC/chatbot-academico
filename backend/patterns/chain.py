@@ -1,3 +1,4 @@
+# Chain of Responsibility para processar a entrada
 class Handler:
     def __init__(self):
         self.next_handler = None
@@ -11,10 +12,11 @@ class Handler:
             return self.next_handler.handle(request)
         return None
 
+# Handler para os comandos do chatbot
 class CommandHandler(Handler):
     def __init__(self, commands):
         super().__init__()
-        self.commands = commands  # dict of command name -> Command instance
+        self.commands = commands  # Dicionário de comandos
 
     def handle(self, request):
         text = request.strip()
@@ -25,13 +27,14 @@ class CommandHandler(Handler):
         else:
             return super().handle(request)
 
+# Handler para filtrar perguntas vazias ou inválidas
 class FilterHandler(Handler):
     def handle(self, request):
-        # Exemplo simples de filtro: bloquear pergunta vazia
         if not request.strip():
             return 'Pergunta vazia não é permitida.'
         return super().handle(request)
 
+# Handler para passar a pergunta para o modelo de linguagem
 class ModelHandler(Handler):
     def __init__(self, llama_handler):
         super().__init__()

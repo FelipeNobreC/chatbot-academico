@@ -1,100 +1,46 @@
-# Chatbot Acadêmico - Backend com Padrões Comportamentais
+# Chatbot Acadêmico - Backend com Hugging Face
 
-Projeto backend completo com FastAPI que implementa um chatbot acadêmico usando o modelo TeenyTinyLlama-460m local, integrando os padrões de projeto comportamentais:
-
-- Chain of Responsibility
-- Observer
-- Command
+Este projeto é um chatbot acadêmico simples, onde qualquer pessoa pode interagir com o sistema para obter respostas. O backend usa **FastAPI** e **transformers** do Hugging Face para gerar respostas com o modelo **TeenyTinyLlama-460m**.
 
 ---
 
-## Pré-requisitos
+## Como rodar o projeto:
 
-- Python 3.9 ou superior
-- Pip instalado
-- Modelo TeenyTinyLlama-460m `.bin` baixado (link abaixo)
-- Windows/Linux/Mac com CPU compatível
-- Internet para baixar dependências
+### Passo 1: Instalar as dependências
 
----
-
-## Passo 1: Clonar ou baixar o projeto
-
-Baixe o arquivo ZIP e extraia em sua máquina.
-
----
-
-## Passo 2: Instalar dependências
-
-Abra terminal/prompt na pasta do projeto e execute:
-
+No terminal, dentro da pasta do projeto, execute o seguinte comando para instalar as dependências:
 ```bash
-pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[cryptography] pydantic llama-cpp-python aiofiles
+pip install transformers fastapi uvicorn torch
 ```
 
----
+### Passo 2: Rodar o servidor
 
-## Passo 3: Baixar o modelo TeenyTinyLlama-460m
-
-Baixe o modelo `.bin` em:
-
-https://huggingface.co/nicholasKluge/TeenyTinyLlama-460m
-
-Coloque o arquivo baixado dentro da pasta:
-
-```
-backend/models/teenytinyllama-460m.bin
-```
-
----
-
-## Passo 4: Rodar a aplicação
-
-Na pasta raiz do projeto, execute o comando para iniciar o backend:
-
+Execute o comando abaixo para rodar o servidor FastAPI:
 ```bash
 uvicorn backend.main:app --reload
 ```
 
-O servidor iniciará em:
+O backend estará rodando em `http://localhost:8000`.
 
-```
-http://localhost:8000
-```
+### Passo 3: Interagir com o chatbot
 
----
-
-## Passo 5: Usar a API
-
-- Endpoints principais:
-
-  - POST `/auth/register` - registra novo usuário
-  - POST `/auth/login` - faz login e retorna token JWT
-  - POST `/chat/send` - envia pergunta ao chatbot (token Bearer necessário)
-  - GET `/admin/stats` - estatísticas (somente admin)
-  - GET `/admin/export` - exporta histórico CSV (somente admin)
+Acesse a rota `/chat/send` para interagir com o chatbot. Você pode testar a API enviando uma pergunta e obtendo a resposta gerada pelo modelo.
 
 ---
 
-## Padrões implementados
+## Como funciona o código:
 
-- **Chain of Responsibility:** tratamento das perguntas por handlers (comando, filtro, modelo)
-- **Observer:** notificação desacoplada para eventos (ex: usuário criado)
-- **Command:** comandos encapsulados para respostas pré-definidas (`/help`, `/echo`)
+- O **FastAPI** recebe as requisições através do endpoint `/chat/send`.
+- A requisição é processada pela função `send_message`, que envia a pergunta para o modelo Hugging Face (**TeenyTinyLlama-460m**).
+- O modelo gera a resposta, que é retornada ao usuário.
 
----
-
-## Observações
-
-- Para testes, registre um usuário e faça login para obter o token JWT.
-- Use comandos iniciados com `/` para testar comandos, ex: `/help` ou `/echo ola`.
-- O usuário com nome `admin` tem acesso ao painel administrativo.
-- Logs de eventos observados aparecerão no console (ex: cadastro de usuário).
+O modelo é carregado dinamicamente a partir do Hugging Face com a biblioteca `transformers`, sem a necessidade de baixar arquivos `.bin` manualmente.
 
 ---
 
-## Dúvidas ou suporte
+## Observações:
 
-Me avise que te ajudo!
+- O projeto usa **Torch** para utilizar o modelo, então é recomendado ter uma GPU para um melhor desempenho.
+- **CORS** foi configurado para permitir requisições de qualquer origem.
 
----
+Se tiver qualquer dúvida ou quiser adicionar mais funcionalidades, entre em contato!

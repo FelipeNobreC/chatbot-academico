@@ -1,3 +1,4 @@
+# Padrão Command para encapsular ações
 class Command:
     def execute(self, *args, **kwargs):
         pass
